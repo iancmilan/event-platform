@@ -11,23 +11,21 @@ interface LessonProps {
   type: 'live' | 'class';
 }
 
-export function Lesson({ title, availableAt, type, slug }: LessonProps) {
-  const { activeSlug } = useParams<{ activeSlug: string }>()
+export function Lesson(props : LessonProps) {
+  const { slug } = useParams<{ slug: string }>()
 
-  const isLessonAvailable = isPast(availableAt);
-  const availableDateFormatted = format(availableAt, "EEEE' • 'd' de 'MMMM' • 'k'h'mm", {
+  const isLessonAvailable = isPast(props.availableAt);
+  const availableDateFormatted = format(props.availableAt, "EEEE' • 'd' de 'MMMM' • 'k'h'mm", {
     locale: ptBR,
   })
 
-  const isActiveLesson = activeSlug === slug
+  const isActiveLesson = slug === props.slug
 
   return (
-    <Link to={`/event/lesson/${slug}`} className='group'>
+    <Link to={`/event/lesson/${props.slug}`} className='group'>
       <span className="text-gray-300">
         {availableDateFormatted}
       </span>
-
-      ` ${isActiveLesson ? 'bg-green-500': ''}`
 
       <div
         className={classNames('rounded border border-gray-500 p-4 mt-2 group-hover:border-green-500', {
@@ -55,7 +53,7 @@ export function Lesson({ title, availableAt, type, slug }: LessonProps) {
             'border-green-300': !isActiveLesson,
 
           })}>
-            {type == 'live' ? 'AO VIVO' : 'AULA PRÁTICA'}
+            {props.type == 'live' ? 'AO VIVO' : 'AULA PRÁTICA'}
           </span>
         </header>
 
@@ -63,7 +61,7 @@ export function Lesson({ title, availableAt, type, slug }: LessonProps) {
           'text-white': isActiveLesson,
           'text-gray-200': !isActiveLesson,
         })}>
-          {title}
+          {props.title}
         </strong>
       </div>
     </Link>
